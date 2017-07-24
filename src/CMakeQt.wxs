@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='windows-1252'?>
+<Wix xmlns='http://schemas.microsoft.com/wix/2006/wi'>
+    <!-- use new GUID for UpgradeCode here -->
+    <Product Name='CMakeQt' Manufacturer='Robert Hansen' Id='*' UpgradeCode='81539CDB-900C-4A59-AF22-06D2FDF09964' Language='1033' Codepage='1252' Version='1.0'>
+		<Package Id='*' Keywords='Installer' Description="CMakeQt 1.0 Installer" Comments='CMakeQt is released under the ISC License' Manufacturer='Robert Hansen"' InstallerVersion='301' Languages='1033' Compressed='yes' SummaryCodepage='1252' />
+		<Media Id='1' Cabinet='CMakeQt.cab' EmbedCab='yes' DiskPrompt='CD-ROM #1' />
+		<Property Id='DiskPrompt' Value="CMakeQt 1.0 Installation [1]" />
+		<Property Id="WIXUI_INSTALLDIR" Value="INSTALLDIR" />
+		<UIRef Id="WixUI_Minimal"/>
+		<WixVariable Id="WixUILicenseRtf" Value="license.rtf" />
+		<Directory Id='TARGETDIR' Name='SourceDir'>
+            <Directory Id="BIN_DIR_REF" Name="bin"/>
+			<Directory Id="ProgramMenuFolder">
+				<Directory Id="ApplicationProgramsFolder" Name="CMakeQt"/>
+				<Directory Id="ProgramMenuDir" Name="CMakeQt">
+					<Component Id="ProgramMenuDir" Guid="*">
+						<RemoveFolder Id='ProgramMenuDir' On='uninstall' />
+					</Component>
+				</Directory>
+			</Directory>
+			<Directory Id='ProgramFilesFolder' Name='PFiles'>
+				<Directory Id='INSTALLDIR' Name='CMakeQt'/>
+			</Directory>
+			<Directory Id="DesktopFolder" Name="Desktop" />
+		</Directory>
+
+		<DirectoryRef Id="ApplicationProgramsFolder">
+			<Component Id="ApplicationShortcut" Guid="*">
+				<Shortcut Id="CMakeQtShortcut" Name="CMakeQt" Description="(none)" Target="[#cmakeqt]" WorkingDirectory="APPLICATIONROOTDIRECTORY"/>
+				<RemoveFolder Id="ApplicationProgramsFolder" On="uninstall"/>
+				<RegistryValue Root="HKCU" Key="Software\Robert Hansen\CMakeQt" Name="installed" Type="integer" Value="1" KeyPath="yes"/>
+			</Component>
+		</DirectoryRef>
+
+		<Feature Id='Complete' Title="CMakeQt 1.0" Description="The complete package" ConfigurableDirectory="INSTALLDIR" Level='1'>
+			<Feature Id="App" Title="CMakeQt" Description="The application" Level="1">
+				<ComponentRef Id='ProgramMenuDir' />
+				<ComponentRef Id="ApplicationShortcut" />
+                <ComponentGroupRef Id="CMakeQtGroupId" />
+			</Feature>
+		</Feature>
+	</Product>
+</Wix>
