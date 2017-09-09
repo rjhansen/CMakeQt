@@ -1,42 +1,61 @@
 <?xml version='1.0' encoding='windows-1252'?>
+<?define Vendor="Hansen Engineering" ?>
+<?define ProductName="CMakeQt"?>
+<?define ProductVersion="1.0"?>
+<!-- This should be largely reusable.  Grep through looking for
+     CHANGE MEs, and change appropriately. -->
+
 <Wix xmlns='http://schemas.microsoft.com/wix/2006/wi'>
-    <!-- use new GUID for UpgradeCode here -->
-    <Product Name='CMakeQt' Manufacturer='Robert Hansen' Id='*' UpgradeCode='81539CDB-900C-4A59-AF22-06D2FDF09964' Language='1033' Codepage='1252' Version='1.0'>
-		<Package Id='*' Keywords='Installer' Description="CMakeQt 1.0 Installer" Comments='CMakeQt is released under the ISC License' Manufacturer='Robert Hansen"' InstallerVersion='301' Languages='1033' Compressed='yes' SummaryCodepage='1252' />
-		<Media Id='1' Cabinet='CMakeQt.cab' EmbedCab='yes' DiskPrompt='CD-ROM #1' />
-		<Property Id='DiskPrompt' Value="CMakeQt 1.0 Installation [1]" />
+    <!-- use new GUID for UpgradeCode here.  Upd<ate version #.  Alter product name, manufacturer.  CHANGE ME -->
+    <Product Name='$(var.ProductName)' Manufacturer='$(var.Vendor)' Id='*' UpgradeCode='81539CDB-900C-4A59-AF22-06D2FDF09964' Language='1033' Codepage='1252' Version='1.0'>
+	    <!-- Change comment.  CHANGE ME. -->
+		<Package Id='*' Keywords='Installer' Description="$(var.ProductName) $(var.ProductVersion) Installer" Comments='Released under the ISC License' Manufacturer='$(var.Vendor)' InstallerVersion='301' Languages='1033' Compressed='yes' SummaryCodepage='1252' />
+		<Media Id='1' Cabinet='$(var.ProductName).cab' EmbedCab='yes' DiskPrompt='CD-ROM #1' />
+		<Property Id='DiskPrompt' Value="$(var.ProductName) $(var.ProductVersion) Installation [1]" />
 		<Property Id="WIXUI_INSTALLDIR" Value="INSTALLDIR" />
-		<UIRef Id="WixUI_Minimal"/>
+		<UIRef Id="WixUI_Mondo"/>
 		<WixVariable Id="WixUILicenseRtf" Value="license.rtf" />
+
 		<Directory Id='TARGETDIR' Name='SourceDir'>
-            <Directory Id="BIN_DIR_REF" Name="bin"/>
-			<Directory Id="ProgramMenuFolder">
-				<Directory Id="ApplicationProgramsFolder" Name="CMakeQt"/>
-				<Directory Id="ProgramMenuDir" Name="CMakeQt">
-					<Component Id="ProgramMenuDir" Guid="*">
+		<!-- ProgramFilesFolder for 32-bit builds; ProgramFiles64Folder for 64-bit -->
+			<Directory Id="ProgramFiles64Folder" Name="PFiles">
+				<Directory Id="vendor" Name="$(var.Vendor)">
+					<Directory Id="INSTALLDIR" Name="$(var.ProductName)">
+						<Directory Id="BIN_DIR_REF"/>
+						<!-- These component GUIDs must be unique. CHANGE ME. -->
+						<Component Id="MainComponent" Guid="{23CA18EA-71D1-4606-84D3-5FC7BD24A84A}">
+						    <!-- Source should be the executable to install.  CHANGE ME. -->
+							<File Id="MainApp" KeyPath="yes" Source="CMakeQt.exe" />
+							<!-- These shortcuts come without icons.  Look into fixing that. -->
+							<Shortcut Id="startmenuCMakeQt" Directory="ProgramMenuDir" Name="$(var.ProductName) $(var.ProductVersion)" WorkingDirectory='INSTALLDIR' Advertise="yes" />
+							<Shortcut Id="desktopCMakeQt" Directory="DesktopFolder" Name="$(var.ProductName) $(var.ProductVersion)" WorkingDirectory='INSTALLDIR' Advertise="yes" />
+						</Component>
+					</Directory>
+				</Directory>
+			</Directory>
+
+			<Directory Id="ProgramMenuFolder" Name="$(var.Vendor)">
+				<Directory Id="ProgramMenuDir" Name="$(var.ProductName) $(var.ProductVersion)">
+					<!-- Guid needs to be altered.  CHANGE ME. -->
+					<Component Id="ProgramMenuDir" Guid="10b5871a-f8e9-43a5-9270-7f72971b5aa8">
 						<RemoveFolder Id='ProgramMenuDir' On='uninstall' />
+						<!-- Change key.  CHANGE ME. -->
+						<RegistryValue Root='HKCU' Key='Software\$(var.Vendor)\$(var.ProductName)' Type='string' Value='' KeyPath='yes' />
 					</Component>
 				</Directory>
 			</Directory>
-			<Directory Id='ProgramFilesFolder' Name='PFiles'>
-				<Directory Id='INSTALLDIR' Name='CMakeQt'/>
-			</Directory>
+			
 			<Directory Id="DesktopFolder" Name="Desktop" />
 		</Directory>
 
-		<DirectoryRef Id="ApplicationProgramsFolder">
-			<Component Id="ApplicationShortcut" Guid="*">
-				<Shortcut Id="CMakeQtShortcut" Name="CMakeQt" Description="(none)" Target="[#cmakeqt]" WorkingDirectory="APPLICATIONROOTDIRECTORY"/>
-				<RemoveFolder Id="ApplicationProgramsFolder" On="uninstall"/>
-				<RegistryValue Root="HKCU" Key="Software\Robert Hansen\CMakeQt" Name="installed" Type="integer" Value="1" KeyPath="yes"/>
-			</Component>
-		</DirectoryRef>
-
-		<Feature Id='Complete' Title="CMakeQt 1.0" Description="The complete package" ConfigurableDirectory="INSTALLDIR" Level='1'>
-			<Feature Id="App" Title="CMakeQt" Description="The application" Level="1">
-				<ComponentRef Id='ProgramMenuDir' />
-				<ComponentRef Id="ApplicationShortcut" />
-                <ComponentGroupRef Id="CMakeQtGroupId" />
+		<Feature Id='Complete' Title="$(var.ProductName) $(var.ProductVersion)" Description="The complete package" ConfigurableDirectory="INSTALLDIR" Level='1'>
+			<Feature Id="App" Title="Application" Description="The application" Level="1" Absent="disallow">
+			    <!-- Installs the supporting DLLs and files -->
+                <ComponentGroupRef Id="$(var.ProductName)GroupId" />
+				<!-- Installs the main executable -->
+				<ComponentRef Id="MainComponent" />
+				<!-- Installs the shortcuts -->
+				<ComponentRef Id="ProgramMenuDir" />
 			</Feature>
 		</Feature>
 	</Product>
