@@ -5,6 +5,7 @@ CMakeQt-*/**
 *.cbp
 *.exe
 *.manifest
+*.wxs
 .idea/**
 Makefile
 src/Makefile
