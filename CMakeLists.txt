@@ -34,6 +34,7 @@ if (APPLE)
             COMMAND /usr/bin/codesign -s "Robert Hansen" "${CMAKE_BINARY_DIR}/${PROJECT_NAME}-${PROJECT_VERSION}/${PROJECT_NAME}.dmg"
             COMMAND rm -rf "${CMAKE_BINARY_DIR}/${PROJECT_NAME}-${PROJECT_VERSION}/${PROJECT_NAME}.app")
 elseif (MSVC)
+    configure_file("${PROJECT_NAME}.wxs.in" "${PROJECT_NAME}.wxs" )
     set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreadedDLL")
     set(CMAKE_BUILD_TYPE Release)
     set(HEAT ${WIXBINDIR}/heat.exe)
