@@ -35,6 +35,15 @@ if (APPLE)
             COMMAND rm -rf "${CMAKE_BINARY_DIR}/${PROJECT_NAME}-${PROJECT_VERSION}/${PROJECT_NAME}.app")
 elseif (MSVC)
     configure_file("template.wxs.in" "${PROJECT_NAME}.wxs" )
+    set_property(DIRECTORY APPEND PROPERTY ADDITIONAL_MAKE_CLEAN_FILES
+            ${PROJECT_NAME}.cbp
+            ${PROJECT_NAME}.exe
+            ${PROJECT_NAME}.exe.manifest
+            ${PROJECT_NAME}.wixobj
+            ${PROJECT_NAME}-${PROJECT_VERSION}.msi
+            ${PROJECT_NAME}-${PROJECT_VERSION}.wixpdb
+            directory.wixobj
+            directory.wxs)
     set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreadedDLL")
     set(CMAKE_BUILD_TYPE Release)
     set(HEAT ${WIXBINDIR}/heat.exe)
