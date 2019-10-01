@@ -1,6 +1,9 @@
 cmake_minimum_required(VERSION 3.15.0 FATAL_ERROR)
 
 ### User-serviceable parts! ###
+### If you're on Windows, edit template.wxs.in and adjust the GUIDs for your
+### application.  THIS IS VERY IMPORTANT.
+###
 project(CMakeQt VERSION 1.0.0)
 if (MSVC)
     set(SIGN_BINARIES ON)
@@ -10,6 +13,7 @@ if (MSVC)
 endif()
 set(SOURCECODE src/main.cpp src/mainwindow.cpp src/mainwindow.ui)
 find_package(Qt5 COMPONENTS Core Widgets REQUIRED)
+###
 ### End user-serviceable parts ###
 
 
