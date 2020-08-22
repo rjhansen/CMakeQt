@@ -43,12 +43,12 @@ def sanity_check():
 
 def deploy_libraries():
     sanity_check()
-    run([windeployqt, product_dir])
+    run([windeployqt, productdir])
 
 def sign_release():
     sanity_check()
     files_to_sign = []
-    for (path, _, files) in walk(product_dir):
+    for (path, _, files) in walk(productdir):
         files_to_sign += [join(path, X) for X in files
                          if match(r"^.*\.(exe|dll)$", X)]
     for filename in files_to_sign:
