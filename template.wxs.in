@@ -4,12 +4,13 @@
 <?define ProductVersion="@PROJECT_VERSION@"?>
 
 <Wix xmlns='http://schemas.microsoft.com/wix/2006/wi'>
-    <Product Name='$(var.ProductName)' Manufacturer='$(var.Vendor)' Id='*' UpgradeCode='8153BDDB-900C-4A59-AF22-06D2FDF09964' Language='1033' Codepage='1252' Version='$(var.ProductVersion)'>
+    <Product Name='$(var.ProductName)' Manufacturer='$(var.Vendor)' Id='*' UpgradeCode='8153BCDB-900C-4A59-AF22-06D2FDF09964' Language='1033' Codepage='1252' Version='$(var.ProductVersion)'>
 		<Package Id='*' Keywords='Installer' Description="$(var.ProductName) $(var.ProductVersion) Installer" Comments='Released under the ISC License' Manufacturer='$(var.Vendor)' InstallerVersion='301' Languages='1033' Compressed='yes' SummaryCodepage='1252' Platform='x64'/>
 		<MediaTemplate EmbedCab='yes' />
 		<Property Id="WIXUI_INSTALLDIR" Value="INSTALLDIR" />
-		<UIRef Id="WixUI_Mondo"/>
+		<UIRef Id="WixUI_Minimal"/>
 		<WixVariable Id="WixUILicenseRtf" Value="license.rtf" />
+		<MajorUpgrade DowngradeErrorMessage="A later version of [ProductName] is already installed. Setup will now exit." />
 
 		<Directory Id='TARGETDIR' Name='SourceDir'>
 			<Directory Id='ProgramFiles64Folder'>
