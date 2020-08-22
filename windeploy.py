@@ -97,6 +97,6 @@ def make_msi():
     
 
 if __name__ == '__main__':
-#    deploy_libraries()
-#    sign_release()
+    deploy_libraries()
+    sign_release()
     make_msi()
